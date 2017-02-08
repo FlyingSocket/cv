@@ -11,18 +11,14 @@ $(document).ready(function() {
   var state = false
   var degFinalHour = 0;
   var step = 0;
+  var oldStep = 0;
 
   // $(HOUR).css('transform', 'rotate(90deg)')
-  $('.Btn1').on('click', function() {
-    step++
-    setCase()
+  $('.BtnPlus').on('click', function() {
+    incrementStep()
   })
-  $('.Btn6').on('click', function() {
-    step--
-    setCase()
-  })
-  $('.Btn12').on('click', function() {
-    setHour({ hour: 16 })
+  $('.BtnMoins').on('click', function() {
+    decrementStep()
   })
 
 function setCase() {
@@ -37,30 +33,57 @@ function setCase() {
         hour: 8,
         min: 30
       })
+      transition()
       break;
     case 2:
       setHour({
         hour: 10,
         min: 45
       })
+      transition()
       break;
     case 3:
       setHour({
         hour: 13
       })
+      transition()
       break;
     case 4:
       setHour({
         hour: 16
       })
+      transition()
       break;
     case 5:
       setHour({
         hour: 20
       })
+      transition()
       break;
   }
 }
+
+  function incrementStep() {
+    oldStep = step
+      if (step == 5) {
+        step = 5
+      }
+      else {
+        step++
+        setCase()
+      }
+  }
+
+  function decrementStep() {
+    oldStep = step
+    if (step == 0) {
+      step = 0
+    }
+    else {
+      step--
+      setCase()
+    }
+  }
 
   function setHour(opt) {
     opt.min = opt.min ? opt.min : 0
@@ -72,11 +95,17 @@ function setCase() {
     $(MIN).css('transform', 'rotate('+ degMin +'deg)')
   }
 
+  function transition() {
+    $('.step').fadeOut();
 
-  $('.hour-hand').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
-    function(e) {
-        $('.step').fadeIn();
-    // code to execute after transition ends
+    if( $(".Content").data( "step" ) == step ) {
+      console.log('1')
+    }
 
-  });
+    $('.hour-hand').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
+      function(e) {
+          $('.step').fadeIn();
+      // code to execute after transition ends
+    });
+  }
 })
